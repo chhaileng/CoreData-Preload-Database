@@ -8,18 +8,21 @@
 
 import UIKit
 import CoreData
+import SQLite3
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
+    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         print((persistentContainer.persistentStoreCoordinator.persistentStores.first?.url)!)
         
+        preloadDBData()
         return true
     }
 
@@ -90,6 +93,93 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+    }
+    
+    func preloadDBData() {
+        if UserDefaults.standard.bool(forKey: "preload") == false {
+            loadFromLocalFile()
+            UserDefaults.standard.set(true, forKey: "preload")
+        }
+    }
+    
+    
+    func loadFromLocalFile() {
+        let filePath = Bundle.main.path(forResource: "contact", ofType: "csv")
+        let str = try? String.init(contentsOfFile: filePath!, encoding: .utf8)
+        let items: [(name: String, phone: String)] = parseCsvString(csvString: str!)
+        
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        for item in items {
+            print(item.name + " " + item.phone)
+            
+            let contact = Contact(context: context)
+            contact.name = item.name
+            contact.phone = item.phone
+            contact.profile = UIImagePNGRepresentation(#imageLiteral(resourceName: "default"))
+            
+            self.saveContext()
+        }
+    }
+    
+    func loadFromServer() {
+        let url = URL(string: "https://s3.amazonaws.com/swiftbook/menudata.csv")
+        
+        URLSession.shared.dataTask(with: url!) { (data, res, err) in
+            let str: String! = String.init(data: data!, encoding: .utf8)
+            let items: [(String, String)] = self.parseCsvString(csvString: str)
+            
+            for item in items {
+                print(item.0)
+            }
+        }.resume()
+    }
+    
+    func parseCsvString(csvString: String) -> [(String, String)] {
+        var items: [(String, String)] = []
+        let lines: [String] = csvString.components(separatedBy: NSCharacterSet.newlines) as [String]
+        
+        for line in lines {
+            var values: [String] = []
+            if line != "" {
+                if line.range(of: "\"") != nil {
+                    var textToScan:String = line
+                    var value:NSString?
+                    var textScanner:Scanner = Scanner(string: textToScan)
+                    while textScanner.string != "" {
+                        
+                        if (textScanner.string as NSString).substring(to: 1) == "\"" {
+                            textScanner.scanLocation += 1
+                            textScanner.scanUpTo("\"", into: &value)
+                            textScanner.scanLocation += 1
+                        } else {
+                            textScanner.scanUpTo(",", into: &value)
+                        }
+                        
+                        // Store the value into the values array
+                        values.append(value! as String)
+                        
+                        // Retrieve the unscanned remainder of the string
+                        if textScanner.scanLocation < textScanner.string.count {
+                            textToScan = (textScanner.string as NSString).substring(from: textScanner.scanLocation + 1)
+                        } else {
+                            textToScan = ""
+                        }
+                        textScanner = Scanner(string: textToScan)
+                    }
+                    
+                    // For a line without double quotes, we can simply separate the string
+                    // by using the delimiter (e.g. comma)
+                } else  {
+                    values = line.components(separatedBy: ",")
+                }
+                
+                // Put the values into the tuple and add it to the items array
+                let item = (values[0], values[1])
+                items.append(item)
+            }
+        }
+        return items
     }
 
 }

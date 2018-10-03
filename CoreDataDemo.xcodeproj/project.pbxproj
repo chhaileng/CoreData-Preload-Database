@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		070A6B9521649FCD0014BBE3 /* contact.csv in Resources */ = {isa = PBXBuildFile; fileRef = 070A6B9421649FCC0014BBE3 /* contact.csv */; };
 		07945536211FCD2100DDF9EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07945535211FCD2100DDF9EC /* AppDelegate.swift */; };
 		07945538211FCD2100DDF9EC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07945537211FCD2100DDF9EC /* ViewController.swift */; };
 		0794553B211FCD2100DDF9EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07945539211FCD2100DDF9EC /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		070A6B9421649FCC0014BBE3 /* contact.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = contact.csv; sourceTree = "<group>"; };
 		07945532211FCD2100DDF9EC /* CoreDataDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreDataDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07945535211FCD2100DDF9EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		07945537211FCD2100DDF9EC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 				07945539211FCD2100DDF9EC /* Main.storyboard */,
 				0794553F211FCD2100DDF9EC /* Assets.xcassets */,
 				07945541211FCD2100DDF9EC /* LaunchScreen.storyboard */,
+				070A6B9421649FCC0014BBE3 /* contact.csv */,
 				07945544211FCD2100DDF9EC /* Info.plist */,
 				0794553C211FCD2100DDF9EC /* CoreDataDemo.xcdatamodeld */,
 			);
@@ -130,6 +133,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				07945543211FCD2100DDF9EC /* LaunchScreen.storyboard in Resources */,
+				070A6B9521649FCD0014BBE3 /* contact.csv in Resources */,
 				07945540211FCD2100DDF9EC /* Assets.xcassets in Resources */,
 				0794553B211FCD2100DDF9EC /* Main.storyboard in Resources */,
 			);
